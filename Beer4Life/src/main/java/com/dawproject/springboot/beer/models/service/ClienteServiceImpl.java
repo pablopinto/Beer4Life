@@ -36,6 +36,12 @@ public class ClienteServiceImpl implements IClienteService {
 	public List<Cliente> findAll() {
 		return (List<Cliente>) clienteDao.findAll();
 	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Page<Cliente> findAll(Pageable pageable) {
+		return clienteDao.findAll(pageable);
+	}
 
 	@Override
 	@Transactional
@@ -49,6 +55,7 @@ public class ClienteServiceImpl implements IClienteService {
 		return clienteDao.findById(id).orElse(null);
 	}
 	
+	
 	@Override
 	@Transactional(readOnly = true)
 	public Cliente fetchByIdWithFacturas(Long id) {
@@ -61,11 +68,6 @@ public class ClienteServiceImpl implements IClienteService {
 		clienteDao.deleteById(id);
 	}
 
-	@Override
-	@Transactional(readOnly = true)
-	public Page<Cliente> findAll(Pageable pageable) {
-		return clienteDao.findAll(pageable);
-	}
 
 	@Override
 	@Transactional(readOnly=true)
