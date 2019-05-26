@@ -9,14 +9,15 @@
 		<version>2.1.4.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.dawproject.springboot.beer.app</groupId>
-	<artifactId>Beer4Life</artifactId>
+	<groupId>com.beer.springboot.app</groupId>
+	<artifactId>beer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Beer4Life</name>
+	<name>beer</name>
 	<description>Demo project for Spring Boot</description>
-
+	
 	<properties>
 		<java.version>11</java.version>
+		 <start-class>com.beer.springboot.app.BeerApplication</start-class>
 	</properties>
 
 	<dependencies>
