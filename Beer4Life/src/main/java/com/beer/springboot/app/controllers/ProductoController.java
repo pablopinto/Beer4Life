@@ -22,13 +22,13 @@ import com.beer.springboot.app.util.paginator.PageRender;
 @Controller
 @SessionAttributes("producto")
 public class ProductoController {
-	
+
 	protected final Log logger = LogFactory.getLog(this.getClass());
-	
+
 	@Autowired
 	private IProductoService productoService;
-	
-	@RequestMapping(value ="/main", method = RequestMethod.GET)
+
+	@RequestMapping(value = "/main", method = RequestMethod.GET)
 	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
 			HttpServletRequest request) {
 
@@ -40,13 +40,12 @@ public class ProductoController {
 		model.addAttribute("titulo", "Listado de productos");
 		model.addAttribute("productos", productos);
 		model.addAttribute("page", pageRender);
-		
+
 		return "main";
 
 	}
-	
-	
-	@RequestMapping(value ="/gestion-productos", method = RequestMethod.GET)
+
+	@RequestMapping(value = "/gestion-productos", method = RequestMethod.GET)
 	public String listarAdmin(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
 			HttpServletRequest request) {
 
@@ -58,36 +57,11 @@ public class ProductoController {
 		model.addAttribute("titulo", "Listado de productos");
 		model.addAttribute("productos", productos);
 		model.addAttribute("page", pageRender);
-		
+
 		return "gestion-productos";
 
 	}
-//	<table class="table table-striped table-dark">
-//	<thead>
-//		<tr>
-//			<th sec:authorize="hasRole('ROLE_USER')">id</th>
-//			<th>nombre</th>
-//			<th>apellido</th>
-//			<th>email</th>
-//			<th>fecha</th>
-//			<th sec:authorize="hasRole('ROLE_ADMIN')">crear factura</th>
-//			<th sec:authorize="hasRole('ROLE_ADMIN')">editar</th>
-//			<th sec:authorize="hasRole('ROLE_ADMIN')">eliminar</th>
-//		</tr>
-//	</thead>
-//
-//	<tbody>
-//		<tr th:each="productos: ${productos}">
-//			<td sec:authorize="hasRole('ROLE_USER')"><a
-//				class="btn btn-primary btn-xs"
-//				th:href="@{/ver/} + ${productos.id}" th:text="${productos.id}"></a></td>
-//			<td th:text="${productos.nombre}"></td>
-//			
-//		</tr>
-//	</tbody>
-//<div th:each="productos: ${productos}" class="row">
-//	<p th:text="${productos.nombre}"></p>
-//</div>
-//</table>
+	
+	@RequestMapping(value = "/gestion-productos", method = RequestMethod.GET)
 
 }
