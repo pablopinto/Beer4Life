@@ -32,7 +32,6 @@ public class ProductoController {
 	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
 			HttpServletRequest request) {
 
-		logger.info("me cago en tu puta madre");
 		Pageable pageRequest = PageRequest.of(page, 6);
 
 		Page<Producto> productos = productoService.findAll(pageRequest);
@@ -43,6 +42,24 @@ public class ProductoController {
 		model.addAttribute("page", pageRender);
 		
 		return "main";
+
+	}
+	
+	
+	@RequestMapping(value ="/gestion-productos", method = RequestMethod.GET)
+	public String listarAdmin(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
+			HttpServletRequest request) {
+
+		Pageable pageRequest = PageRequest.of(page, 6);
+
+		Page<Producto> productos = productoService.findAll(pageRequest);
+
+		PageRender<Producto> pageRender = new PageRender<Producto>("/gestion-productos", productos);
+		model.addAttribute("titulo", "Listado de productos");
+		model.addAttribute("productos", productos);
+		model.addAttribute("page", pageRender);
+		
+		return "gestion-productos";
 
 	}
 //	<table class="table table-striped table-dark">
