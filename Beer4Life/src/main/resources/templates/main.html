@@ -6,12 +6,12 @@
 <head th:replace="layout/layout-s :: head"></head>
 <body>
 
-	<div class="jumbotron">
-		<div class="container text-center">
-			<h1>Beer4Life</h1>
-			<p>Online Store</p>
-		</div>
-	</div>
+<!-- 	<div class="jumbotron"> -->
+<!-- 		<div class="container text-center"> -->
+<!-- 			<h1>Beer4Life</h1> -->
+<!-- 			<p>Online Store</p> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
 	
 	<header th:replace="layout/layout-s :: header"></header>
 	
@@ -26,6 +26,7 @@
 								class="img-responsive" style="width: 100%" alt="Image">
 						</div>
 						<div class="panel-footer" th:text="${productos.precio}" style="text-align:center;"></div>
+							<div class="panel-footer" sec:authentication="name" style="text-align:center;"></div>
 					</div>
 				</div>
 			</div>

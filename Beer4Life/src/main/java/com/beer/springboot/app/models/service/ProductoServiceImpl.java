@@ -8,7 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.beer.springboot.app.models.dao.IClienteDao;
 import com.beer.springboot.app.models.dao.IProductoDao;
+import com.beer.springboot.app.models.entity.Cliente;
 import com.beer.springboot.app.models.entity.Producto;
 
 @Service
@@ -16,6 +18,9 @@ public class ProductoServiceImpl implements IProductoService{
 	
 	@Autowired
 	private IProductoDao productoDao;
+	
+	@Autowired
+	private IClienteDao clienteDao;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -51,6 +56,12 @@ public class ProductoServiceImpl implements IProductoService{
 	@Transactional(readOnly = true)
 	public List<Producto> findByNombre(String term) {
 		return productoDao.findByNombreLikeIgnoreCase("%"+term+"%");
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public Cliente findClienteById(Long id) {
+		return clienteDao.findById(id).orElse(null);
 	}
 
 }
