@@ -1,6 +1,6 @@
 .jumbotron {
 	background-image: url("/images/1.jpg");
-		margin-bottom: 0;
+	margin-bottom: 0;
 	/* 	background-size: cover; */
 	background-position: 50% 13%;
 	color: white;
@@ -14,15 +14,14 @@
 .pru {
 	background-image: url("/images/7.jpg");
 	background-repeat: repeat;
-		background-size: 55%;
+	background-size: 55%;
 	background-position: 50% 13%;
 	padding-top: 40px;
 }
 
-.navbar{
-	margin-bottom: 0px !important ;
+.navbar {
+	margin-bottom: 0px !important;
 	border-radius: 0;
-	
 }
 
 footer {
@@ -30,19 +29,21 @@ footer {
 	padding: 25px;
 }
 
-
-/* Set height of the grid so .sidenav can be 100% (adjust as needed) */
 .row.content {
 	height: 550px
 }
 
-/* Set gray background color and 100% height */
 .sidenav {
-	background-color: #f1f1f1;
 	height: 100%;
+	background-color: #222;
+	padding-top: 0%;
+	color: white;
+	border-width: 1px; 
+	border-style: solid;
+	border-radius :10px;
+	border-color: #101010;
 }
 
-/* On small screens, set height to 'auto' for the grid */
 @media screen and (max-width: 767px) {
 	.row.content {
 		height: auto;

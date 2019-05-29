@@ -1,8 +1,5 @@
 package com.beer.springboot.app.controllers;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,9 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,17 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.beer.springboot.app.models.dao.IUsuarioDao;
 import com.beer.springboot.app.models.entity.Cliente;
 import com.beer.springboot.app.models.entity.Producto;
-import com.beer.springboot.app.models.entity.Usuario;
 import com.beer.springboot.app.models.service.IClienteService;
 import com.beer.springboot.app.models.service.IProductoService;
-import com.beer.springboot.app.models.service.JpaUserDetailService;
 import com.beer.springboot.app.util.paginator.PageRender;
 
 @Controller
@@ -50,9 +40,6 @@ public class ProductoController {
 	
 	@Autowired
 	private IClienteService clienteService;
-	
-	@Autowired
-	private JpaUserDetailService userDetailsService; 
 	
 	@Autowired 
 	IUsuarioDao usuariodao;
@@ -73,6 +60,7 @@ public class ProductoController {
 		Page<Producto> productos = productoService.findAll(pageRequest);
 
 		PageRender<Producto> pageRender = new PageRender<Producto>("/main", productos);
+		
 		model.addAttribute("titulo", "Listado de productos");
 		model.addAttribute("productos", productos);
 		model.addAttribute("page", pageRender);
@@ -124,15 +112,13 @@ public class ProductoController {
 
 		Object data = SecurityContextHolder.getContext().getAuthentication().getName();
 
-		
 		logger.info(data);
-
 
 		Pageable pageRequest = PageRequest.of(page, 6);
 
 		Page<Producto> productos = productoService.findAll(pageRequest);
 
-		PageRender<Producto> pageRender = new PageRender<Producto>("/main", productos);
+		PageRender<Producto> pageRender = new PageRender<Producto>("/shop", productos);
 		model.addAttribute("titulo", "Listado de productos");
 		model.addAttribute("productos", productos);
 		model.addAttribute("page", pageRender);
