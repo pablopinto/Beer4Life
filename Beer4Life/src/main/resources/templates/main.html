@@ -6,29 +6,46 @@
 <head th:replace="layout/layout-s :: head"></head>
 <body>
 
-<!-- 	<div class="jumbotron"> -->
-<!-- 		<div class="container text-center"> -->
-<!-- 			<h1>Beer4Life</h1> -->
-<!-- 			<p>Online Store</p> -->
-<!-- 		</div> -->
-<!-- 	</div> -->
-	
+	<!-- 	<div class="jumbotron"> -->
+	<!-- 		<div class="container text-center"> -->
+	<!-- 			<h1>Beer4Life</h1> -->
+	<!-- 			<p>Online Store</p> -->
+	<!-- 		</div> -->
+	<!-- 	</div> -->
+
 	<header th:replace="layout/layout-s :: header"></header>
-	
+
 	<div class="pru">
 		<div class="container">
-			<div class="column" th:each="productos: ${productos}">
-				<div class="col-sm-4">
-					<div class="panel panel-primary">
-						<div class="panel-heading" th:text="${productos.nombre}"></div>
-						<div class="panel-body">
-							<img src="https://placehold.it/150x80?text=IMAGE"
-								class="img-responsive" style="width: 100%" alt="Image">
-						</div>
-						<div class="panel-footer" th:text="${productos.precio}" style="text-align:center;"></div>
-							<div class="panel-footer" sec:authentication="name" style="text-align:center;"></div>
-					</div>
+			<!-- 			<div class="column" th:each="productos: ${productos}"> -->
+			<!-- 				<div class="col-sm-4"> -->
+			<!-- 					<div class="panel panel-primary"> -->
+			<!-- 						<div class="panel-heading" th:text="${productos.nombre}"></div> -->
+			<!-- 						<div class="panel-body"> -->
+			<!-- 							<img src="https://placehold.it/150x80?text=IMAGE" -->
+			<!-- 								class="img-responsive" style="width: 100%" alt="Image"> -->
+			<!-- 						</div> -->
+			<!-- <!-- 						<div class="panel-footer" th:text="${productos.precio}" style="text-align:center;"></div> -->
+			-->
+			<!-- 							<div class="panel-footer" sec:authentication="name" style="text-align:center;"></div> -->
+			<!-- 					</div> -->
+			<!-- 				</div> -->
+			<!-- 			</div> -->
+			<div class="panel-default well" th:each="product : ${json}">
+				<div class="panel-heading">
+					<h1 th:text="${product.name}"></h1>
 				</div>
+				<h3 class="panel-body">Description [[${json.tags}]]</h3>
+				<div class="row panel-footer">
+					<div th:inline="text" th:text="${product.price}" class="col-md-2">Price: [[${json.price}]] $</div>
+					<div th:inline="text" class="col-md-9">In Stock:
+						</div>
+					<a th:href="@{'/shoppingCart/addProduct/{id}'(id=${product.id})}"
+						class="col-md-1">
+						<button type="button" class="btn btn-primary" th:text="Buy">Buy</button>
+					</a>
+				</div>
+				<br></br>
 			</div>
 		</div>
 	</div>

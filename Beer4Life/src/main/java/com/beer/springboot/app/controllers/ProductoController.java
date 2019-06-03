@@ -1,12 +1,20 @@
 package com.beer.springboot.app.controllers;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,14 +28,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.beer.springboot.app.models.dao.IUsuarioDao;
 import com.beer.springboot.app.models.entity.Cliente;
+import com.beer.springboot.app.models.entity.Populate;
 import com.beer.springboot.app.models.entity.Producto;
 import com.beer.springboot.app.models.service.IClienteService;
 import com.beer.springboot.app.models.service.IProductoService;
 import com.beer.springboot.app.util.paginator.PageRender;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 
 @Controller
 @SessionAttributes("producto")
@@ -47,12 +64,15 @@ public class ProductoController {
 	@RequestMapping(value = "/main", method = RequestMethod.GET)
 	public String listar(@RequestParam(name = "page", defaultValue = "0")  int page,
 			Model model,
-			HttpServletRequest request) {
+			HttpServletRequest request) throws JsonParseException, JsonMappingException, MalformedURLException, IOException {
 
 		Object data = SecurityContextHolder.getContext().getAuthentication().getName();
-
 		
-		logger.info(data);
+		final String uri ="http://localhost:8090/api/v1/beer/1";
+		ObjectMapper mapper = new ObjectMapper();
+		Populate obj = mapper.readValue(new URL(uri), Populate.class);
+				
+		logger.info(obj.getPrice() + "asssfs");
 
 
 		Pageable pageRequest = PageRequest.of(page, 6);
@@ -65,6 +85,7 @@ public class ProductoController {
 		model.addAttribute("productos", productos);
 		model.addAttribute("page", pageRender);
 		model.addAttribute("data", data);
+		model.addAttribute("json" , obj);
 
 		return "main";
 
@@ -108,11 +129,14 @@ public class ProductoController {
 	@RequestMapping(value = "/shop", method = RequestMethod.GET)
 	public String shop(@RequestParam(name = "page", defaultValue = "0")  int page,
 			Model model,
-			HttpServletRequest request) {
+			HttpServletRequest request) throws JsonParseException, JsonMappingException, MalformedURLException, IOException {
 
 		Object data = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		final String uri ="http://localhost:8090/api/v1/beer";
+		ObjectMapper mapper = new ObjectMapper();
+		Populate obj = mapper.readValue(new URL(uri), Populate.class);
 
-		logger.info(data);
 
 		Pageable pageRequest = PageRequest.of(page, 6);
 
@@ -123,6 +147,7 @@ public class ProductoController {
 		model.addAttribute("productos", productos);
 		model.addAttribute("page", pageRender);
 		model.addAttribute("data", data);
+		model.addAttribute("json",obj);
 
 		return "shop";
 
