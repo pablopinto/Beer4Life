@@ -40,6 +40,9 @@ public class Factura implements Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Cliente cliente;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Usuario usuario;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "factura_id") // clave foranea
@@ -92,6 +95,14 @@ public class Factura implements Serializable {
 
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	public List<ItemFactura> getItems() {

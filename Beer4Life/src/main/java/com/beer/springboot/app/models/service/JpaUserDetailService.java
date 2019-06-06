@@ -53,5 +53,19 @@ public class JpaUserDetailService implements UserDetailsService{
 		}
 		return new User(usuario.getUsername(), usuario.getPassword(), usuario.getEnabled(), true, true, true, authorities);
 	}
+	
+//	private BCryptPasswordEncoder byBCryptPasswordEncoder;
+//	private Role role;
+	
+//	public void save(Usuario usuario) {
+//	    usuario.setPassword(byBCryptPasswordEncoder.encode(usuario.getPassword()));
+//	    usuario.setRoles(new HashSet<>(role.findAll()));
+//	    userRepository.save(user);
+//	}
+//
+//	@Override
+//	public User findByUsername(String username) {
+//	    return userRepository.findByUsername(username);
+//	}
 
 }

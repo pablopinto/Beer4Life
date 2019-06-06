@@ -1,18 +1,23 @@
 package com.beer.springboot.app.models.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.util.Random;
 
-import org.apache.tomcat.util.http.fileupload.ParameterParser;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-public class Populate {
+@Entity
+@Table(name = "populate")
+public class Populate implements Serializable{
 
+	private static final long serialVersionUID = 1L;
+	
 	private Double input = (Math.random()*6) + 1.30; 
 	BigDecimal bd = new BigDecimal(input).setScale(2, RoundingMode.HALF_UP);
 	
-	
+	@Id
 	private int id;
 	private  String name;
 	private String tags;

@@ -92,7 +92,7 @@ public class ClienteController {
 
 	}
 
-	@RequestMapping(value = { "/listar", "/" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/listar"}, method = RequestMethod.GET)
 	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
 			Authentication authentication,
 			HttpServletRequest request) {
@@ -173,8 +173,12 @@ public class ClienteController {
 
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/form", method = RequestMethod.POST)
-	public String guardar(@Valid Cliente cliente, BindingResult result, Model model,
-			@RequestParam("file") MultipartFile foto, RedirectAttributes flash, SessionStatus status) {
+	public String guardar(@Valid Cliente cliente, 
+			BindingResult result, 
+			Model model,
+			@RequestParam("file") MultipartFile foto, 
+			RedirectAttributes flash, 
+			SessionStatus status) {
 
 		if (result.hasErrors()) {
 			model.addAttribute("titulo", "Formulario de Cliente");

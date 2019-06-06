@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<div class="panel-default well" th:each="product : ${json}">
+				<div class="panel-heading">
+					<h1 th:text="${product.name}"></h1>
+				</div>
+				<h3 class="panel-body">Description [[${json.tags}]]</h3>
+				<div class="row panel-footer">
+					<div th:inline="text" th:text="${product.price}" class="col-md-2">Price: [[${json.price}]] $</div>
+					<div th:inline="text" class="col-md-9">In Stock:
+						</div>
+					<a th:href="@{'/shoppingCart/addProduct/{id}'(id=${product.id})}"
+						class="col-md-1">
+						<button type="button" class="btn btn-primary" th:text="Buy">Buy</button>
+					</a>
+				</div>
+				<br></br>
+			</div>
+</body>
+</html>
