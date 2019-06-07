@@ -3,7 +3,6 @@ package com.beer.springboot.app.controllers;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,10 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -69,14 +64,11 @@ public class ProductoController {
 	
 		Pageable pageRequest = PageRequest.of(page, 6);
 
-//		Page<Producto> productos = productoService.findAll(pageRequest);
 		Page<Populate> populate = populateService.findAll(pageRequest);
 		
-//		PageRender<Producto> pageRender = new PageRender<Producto>("/main", productos);
 		PageRender<Populate> pageRender = new PageRender<Populate>("/main", populate);
 
 		model.addAttribute("titulo", "Listado de productos");
-//		model.addAttribute("productos", productos);
 		model.addAttribute("populate", populate);
 		model.addAttribute("page", pageRender);
 		model.addAttribute("data", data);
@@ -127,20 +119,16 @@ public class ProductoController {
 
 		Object data = SecurityContextHolder.getContext().getAuthentication().getName();
 
-		final String uri = "http://localhost:8090/api/v1/beer";
-		ObjectMapper mapper = new ObjectMapper();
-		Populate obj = mapper.readValue(new URL(uri), Populate.class);
+		Pageable pageRequest = PageRequest.of(page, 9);
 
-		Pageable pageRequest = PageRequest.of(page, 6);
+		Page<Populate> populate = populateService.findAll(pageRequest);
+		
+		PageRender<Populate> pageRender = new PageRender<Populate>("/shop", populate);
 
-		Page<Producto> productos = productoService.findAll(pageRequest);
-
-		PageRender<Producto> pageRender = new PageRender<Producto>("/shop", productos);
 		model.addAttribute("titulo", "Listado de productos");
-		model.addAttribute("productos", productos);
+		model.addAttribute("populate", populate);
 		model.addAttribute("page", pageRender);
 		model.addAttribute("data", data);
-		model.addAttribute("json", obj);
 
 		return "shop";
 
@@ -162,7 +150,7 @@ public class ProductoController {
 			
 
 		}
-		return "populate";
+		return "redirect:main";
 
 	}
 	

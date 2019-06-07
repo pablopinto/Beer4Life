@@ -1,8 +1,6 @@
 package com.beer.springboot.app.controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -22,20 +20,20 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.beer.springboot.app.models.dao.IUsuarioDao;
 import com.beer.springboot.app.models.entity.Role;
 import com.beer.springboot.app.models.entity.Usuario;
+import com.beer.springboot.app.models.service.IRegisterService;
 import com.beer.springboot.app.models.service.IUploadFileService;
-import com.beer.springboot.app.models.service.JpaUserDetailService;
 
 @Controller
 public class RegistrationController {
-	
-	@Autowired
-	private JpaUserDetailService jpaUserDetail;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
 	private IUsuarioDao usuarioDao;
+	
+	@Autowired
+	private IRegisterService registerService;
 	
 	@Autowired
 	private IUploadFileService UploadFileService;
@@ -98,11 +96,13 @@ public class RegistrationController {
 		String mensajeFlash = (usuario.getId() != null) ? "Cliente editado con exito" : "Cliente creado con exito";
 		usuario.setEnabled(true);
 		usuario.setPassword(bcryptPassword);
-		List<String> role = new ArrayList<String>();
-		role.add("ROLE_USER");
-		
-		usuario.setRoles(roles);
 		usuarioDao.save(usuario);
+		
+		Role role = new Role();
+		role.setUser_id(usuario.getId());
+		role.setAuthority("ROLE_USER");
+		registerService.save(role);
+		
 		status.setComplete();
 		flash.addFlashAttribute("success", mensajeFlash);
 

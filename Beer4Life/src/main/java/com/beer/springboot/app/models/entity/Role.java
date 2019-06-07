@@ -18,7 +18,9 @@ public class Role implements Serializable {
 	private Long id;
 
 	private String authority;
-
+	
+	private Long user_id;
+	
 	public Long getId() {
 		return id;
 	}
@@ -34,6 +36,17 @@ public class Role implements Serializable {
 	public void setAuthority(String authority) {
 		this.authority = authority;
 	}
+	
+	public Long getUser_id() {
+		return user_id;
+	}
+
+	public void setUser_id(Long user_id) {
+		this.user_id = user_id;
+	}
+
+
+
 
 	/**
 	 * 
