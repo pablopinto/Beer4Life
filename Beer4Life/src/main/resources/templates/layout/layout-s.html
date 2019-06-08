@@ -9,6 +9,7 @@
 <title th:text="'Spring Boot + Thymeleaf + Data JPA -' + ${titulo}"></title>
 <link rel="stylesheet" th:href="@{/css/bootstrap3.min.css}">
 <link rel="stylesheet" th:href="@{/css/jquery-ui.min.css}">
+<!-- <link rel="stylesheet" th:href="@{/css/carousel.css}"> -->
 <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 
@@ -39,7 +40,7 @@
 					<ul class="nav navbar-nav">
 						<li><a th:href="@{/main}">Home</a></li>
 						<li><a th:href="@{/shop}">Shop</a></li>
-						<li><a th:href="@{/info}">Contact</a></li>
+						<li><a th:href="@{/contact}">Contact</a></li>
 						<li><a sec:authorize="hasRole('ROLE_ADMIN')"
 							th:href="@{/gestion-productos}">Admin Productos</a></li>
 						<li><a sec:authorize="hasRole('ROLE_ADMIN')"

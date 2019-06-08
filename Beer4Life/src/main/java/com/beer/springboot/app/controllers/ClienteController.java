@@ -38,7 +38,9 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.beer.springboot.app.models.dao.IUsuarioDao;
 import com.beer.springboot.app.models.entity.Cliente;
+import com.beer.springboot.app.models.entity.Usuario;
 import com.beer.springboot.app.models.service.IClienteService;
 import com.beer.springboot.app.models.service.IUploadFileService;
 import com.beer.springboot.app.util.paginator.PageRender;
@@ -51,6 +53,9 @@ public class ClienteController {
 
 	@Autowired
 	private IClienteService clienteService;
+	
+	@Autowired
+	private IUsuarioDao usuarioDao;
 
 	@Autowired
 	private IUploadFileService UploadFileService;
@@ -74,7 +79,6 @@ public class ClienteController {
 				.body(recurso);
 	}
 
-//	@Secured("ROLE_USER")
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping(value = "/ver/{id}")
 	public String ver(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
@@ -131,11 +135,12 @@ public class ClienteController {
 
 		Pageable pageRequest = PageRequest.of(page, 4);
 
-		Page<Cliente> clientes = clienteService.findAll(pageRequest);
+//		Page<Cliente> clientes = clienteService.findAll(pageRequest);
+		Page<Usuario> usuario = usuarioDao.findAll(pageRequest);
 
-		PageRender<Cliente> pageRender = new PageRender<Cliente>("/listar", clientes);
+		PageRender<Usuario> pageRender = new PageRender<Usuario>("/listar", usuario);
 		model.addAttribute("titulo", "Listado de clientes");
-		model.addAttribute("clientes", clientes);
+		model.addAttribute("clientes", usuario);
 		model.addAttribute("page", pageRender);
 		return "listar";
 
@@ -145,8 +150,8 @@ public class ClienteController {
 	@RequestMapping(value = "/form")
 	public String crear(Map<String, Object> model) {
 
-		Cliente cliente = new Cliente();
-		model.put("cliente", cliente);
+		Usuario usuario = new Usuario();
+		model.put("cliente", usuario);
 		model.put("titulo", "Formulario de Cliente");
 		return "form";
 	}

@@ -133,7 +133,7 @@ public class ProductoController {
 		return "shop";
 
 	}
-
+	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping(value = "/populate")
 	public String populate(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
@@ -151,6 +151,13 @@ public class ProductoController {
 
 		}
 		return "redirect:main";
+
+	}
+
+	@GetMapping(value = "/contact")
+	public String contact(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
+			HttpServletRequest request){
+		return "contact";
 
 	}
 	
