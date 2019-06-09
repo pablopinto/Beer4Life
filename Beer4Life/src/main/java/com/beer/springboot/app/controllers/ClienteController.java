@@ -24,6 +24,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,10 +40,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.beer.springboot.app.models.dao.IUsuarioDao;
-import com.beer.springboot.app.models.entity.Cliente;
+import com.beer.springboot.app.models.entity.Role;
 import com.beer.springboot.app.models.entity.Usuario;
-import com.beer.springboot.app.models.service.IClienteService;
+import com.beer.springboot.app.models.service.IRegisterService;
 import com.beer.springboot.app.models.service.IUploadFileService;
+import com.beer.springboot.app.models.service.IUsuarioService;
 import com.beer.springboot.app.util.paginator.PageRender;
 
 @Controller
@@ -52,13 +54,19 @@ public class ClienteController {
 	protected final Log logger = LogFactory.getLog(this.getClass());
 
 	@Autowired
-	private IClienteService clienteService;
+	private IUsuarioDao usuarioDao;
 	
 	@Autowired
-	private IUsuarioDao usuarioDao;
+	private IUsuarioService usuarioService;
 
 	@Autowired
 	private IUploadFileService UploadFileService;
+	
+	@Autowired
+	private IRegisterService registerService;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
 //	private final Logger log = LoggerFactory.getLogger(getClass()); // Para hacer debug de los sitios de directorio
 //	private final static String UPLOADS_FOLDER = "uploads";
@@ -81,16 +89,19 @@ public class ClienteController {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping(value = "/ver/{id}")
-	public String ver(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
+	public String ver(
+			@PathVariable(value = "id") Long id, 
+			Map<String, Object> model, 
+			RedirectAttributes flash) {
 
-		Cliente cliente = clienteService.fetchByIdWithFacturas(id); // clienteService.findOne(id);
-		if (cliente == null) {
+		Usuario usuario = usuarioDao.fetchByIdWithFacturas(id); // clienteService.findOne(id);
+		if (usuario == null) {
 			flash.addFlashAttribute("error", "El cliente no existe en la base de datos");
 			return "redirect:/listar";
 		}
 
-		model.put("cliente", cliente);
-		model.put("titulo", "Detalles del cliente " + cliente.getNombre());
+		model.put("cliente", usuario);
+		model.put("titulo", "Detalles del cliente " + usuario.getName());
 
 		return "ver";
 
@@ -159,11 +170,11 @@ public class ClienteController {
 	@RequestMapping(value = "/form/{id}")
 	public String editar(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 
-		Cliente cliente = null;
+		Usuario usuario = null;
 
 		if (id > 0) {
-			cliente = clienteService.findOne(id);
-			if (cliente == null) {
+			usuario = usuarioService.findOne(id);
+			if (usuario == null) {
 				flash.addFlashAttribute("error", "El id del cliente no existe en la base de datos");
 				return "redirect:/listar";
 			}
@@ -171,19 +182,24 @@ public class ClienteController {
 			flash.addFlashAttribute("error", "El id del cliente no puede ser cero");
 			return "redirect:/listar";
 		}
-		model.put("cliente", cliente);
+		model.put("cliente", usuario);
 		model.put("titulo", "Editar Cliente");
 		return "form";
 	}
 
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/form", method = RequestMethod.POST)
-	public String guardar(@Valid Cliente cliente, 
+	public String guardar(
+			@Valid Usuario usuario, 
+			@Valid Role roles,
 			BindingResult result, 
 			Model model,
+			@RequestParam(value="password", required=true) String pass,
+			@RequestParam(value="enabled", required=true) Boolean enabled,
+			@RequestParam(value="rol", required=true) String rol,
 			@RequestParam("file") MultipartFile foto, 
 			RedirectAttributes flash, 
-			SessionStatus status) {
+			SessionStatus status) throws IOException {
 
 		if (result.hasErrors()) {
 			model.addAttribute("titulo", "Formulario de Cliente");
@@ -192,19 +208,13 @@ public class ClienteController {
 
 		if (!foto.isEmpty()) {
 
-			if (cliente.getId() != null && cliente.getId() > 0 && cliente.getFoto() != null
-					&& cliente.getFoto().length() > 0) {
+			if (usuario.getId() != null && usuario.getId() > 0 && usuario.getFoto() != null
+					&& usuario.getFoto().length() > 0) {
 
-				UploadFileService.delete(cliente.getFoto());
+				UploadFileService.delete(usuario.getFoto());
 			}
 
-			String uniqueFilename = null;
-			try {
-				uniqueFilename = UploadFileService.copy(foto);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			String uniqueFilename = UploadFileService.copy(foto);
 
 //			Path  directorioRecursos = Paths.get("src//main//resources//static//upload"); Ubicacion de guardado de imagenes en ruta local del proyecto
 //			String rootPath = directorioRecursos.toFile().getAbsolutePath();
@@ -213,12 +223,21 @@ public class ClienteController {
 
 			flash.addFlashAttribute("info", "Has subido correctamente '" + foto.getOriginalFilename() + "'");
 //			flash.addFlashAttribute("info" , "Has subido correctamente '" + rootAbsolutePath + "'"); // Para comprobar que efectivamente el archivo se esta subiendo con el UUID
-			cliente.setFoto(uniqueFilename);
+			usuario.setFoto(uniqueFilename);
 
 		}
-		String mensajeFlash = (cliente.getId() != null) ? "Cliente editado con exito" : "Cliente creado con exito";
-
-		clienteService.save(cliente);
+		String bcryptPassword = passwordEncoder.encode(pass);
+		String mensajeFlash = (usuario.getId() != null) ? "Cliente editado con exito" : "Cliente creado con exito";
+		
+		usuario.setEnabled(enabled);
+		usuario.setPassword(bcryptPassword);
+		usuarioDao.save(usuario);
+		
+//		Role role = new Role();
+		roles.setUser_id(usuario.getId());
+		roles.setAuthority(rol);
+		registerService.save(roles);
+		
 		status.setComplete();
 		flash.addFlashAttribute("success", mensajeFlash);
 		return "redirect:listar";
@@ -228,13 +247,13 @@ public class ClienteController {
 	@RequestMapping(value = "/eliminar/{id}")
 	public String eliminar(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
 		if (id > 0) {
-			Cliente cliente = clienteService.findOne(id);
+			Usuario usuario = usuarioService.findOne(id);
 
-			clienteService.delete(id);
+			usuarioService.delete(id);
 			flash.addFlashAttribute("success", "Cliente eliminado con exito!");
 
-			if (UploadFileService.delete(cliente.getFoto())) {
-				flash.addFlashAttribute("info", "Foto" + cliente.getFoto() + "eliminada con exito!");
+			if (UploadFileService.delete(usuario.getFoto())) {
+				flash.addFlashAttribute("info", "Foto" + usuario.getFoto() + "eliminada con exito!");
 			}
 		}
 

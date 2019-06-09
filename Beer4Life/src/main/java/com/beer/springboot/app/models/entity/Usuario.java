@@ -2,6 +2,7 @@
 package com.beer.springboot.app.models.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -66,12 +67,12 @@ public class Usuario implements Serializable {
 	@DateTimeFormat(pattern="yyyy/MM/dd")
 	private Date createAt;
 	
-//	@OneToMany(mappedBy ="users"  ,fetch =FetchType.LAZY , cascade = CascadeType.ALL)
-//	private List<Factura> facturas;
+	@OneToMany(mappedBy ="usuario"  ,fetch =FetchType.LAZY , cascade = CascadeType.ALL)
+	private List<Factura> facturas;
 	
-//	public Usuario() {
-//		facturas = new ArrayList<Factura>();
-//	}
+	public Usuario() {
+		facturas = new ArrayList<Factura>();
+	}
 	
 	private String foto;
 
@@ -150,17 +151,17 @@ public class Usuario implements Serializable {
 		this.foto = foto;
 	}
 	
-//	public List<Factura> getFacturas() {
-//		return facturas;
-//	}
-//
-//	public void setFacturas(List<Factura> facturas) {
-//		this.facturas = facturas;
-//	}
-//	
-//	public void addFacturas(Factura factura) {
-//		facturas.add(factura);
-//	}
+	public List<Factura> getFacturas() {
+		return facturas;
+	}
+
+	public void setFacturas(List<Factura> facturas) {
+		this.facturas = facturas;
+	}
+	
+	public void addFacturas(Factura factura) {
+		facturas.add(factura);
+	}
 	
 	public Date getCreateAt() {
 		return createAt;

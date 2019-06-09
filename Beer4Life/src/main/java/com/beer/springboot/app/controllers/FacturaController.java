@@ -22,11 +22,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.beer.springboot.app.models.entity.Cliente;
 import com.beer.springboot.app.models.entity.Factura;
 import com.beer.springboot.app.models.entity.ItemFactura;
-import com.beer.springboot.app.models.entity.Producto;
+import com.beer.springboot.app.models.entity.Populate;
+import com.beer.springboot.app.models.entity.Usuario;
 import com.beer.springboot.app.models.service.IClienteService;
+import com.beer.springboot.app.models.service.IUsuarioService;
 
 @Secured("ROLE_ADMIN")
 @Controller
@@ -36,13 +37,16 @@ public class FacturaController {
 
 	@Autowired
 	private IClienteService clienteService;
+	
+	@Autowired
+	private IUsuarioService usuarioService;
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	@GetMapping("/ver/{id}")
 	public String ver(@PathVariable(value = "id") Long id, Model model, RedirectAttributes flash) {
 
-		Factura factura = clienteService.fetchFacturaByIdWithClienteWithItemFacturaWithProducto(id); // clienteService.findFacturaById(id);
+		Factura factura = usuarioService.fetchFacturaByIdWithUsuarioWithItemFacturaWithProducto(id); // clienteService.findFacturaById(id);
 
 		if (factura == null) {
 			flash.addFlashAttribute("error", "La factura no existe en la base de datos");
@@ -60,15 +64,15 @@ public class FacturaController {
 	public String crear(@PathVariable(value = "clienteId") Long clienteId, Map<String, Object> model,
 			RedirectAttributes flash) {
 
-		Cliente cliente = clienteService.findOne(clienteId);
+		Usuario usuario = usuarioService.findOne(clienteId);
 
-		if (cliente == null) {
+		if (usuario == null) {
 			flash.addFlashAttribute("error", "El cliente no existe en la base de datos");
 			return "redirect:/listar";
 		}
 
 		Factura factura = new Factura();
-		factura.setCliente(cliente);
+		factura.setUsuario(usuario);
 
 		model.put("factura", factura);
 		model.put("titulo", "Crear Factura");
@@ -77,8 +81,8 @@ public class FacturaController {
 	}
 
 	@GetMapping(value = "/cargar-productos/{term}", produces = { "application/json" })
-	public @ResponseBody List<Producto> cargarProductos(@PathVariable String term) {
-		return clienteService.findByNombre(term);
+	public @ResponseBody List<Populate> cargarProductos(@PathVariable String term) {
+		return usuarioService.findByNombre(term);
 	}
 
 	@PostMapping("/form")
@@ -99,17 +103,17 @@ public class FacturaController {
 		}
 
 		for (int i = 0; i < itemId.length; i++) {
-			Producto producto = clienteService.findProductoById(itemId[i]);
+			Populate populate = usuarioService.findProductoById(itemId[i]);
 
 			ItemFactura linea = new ItemFactura();
 			linea.setCantidad(cantidad[i]);
-			linea.setProducto(producto);
+			linea.setProducto(populate);
 			factura.addItemFactura(linea);
 
 			log.info("ID: " + itemId[i].toString() + ", cantidad: " + cantidad[i].toString());
 		}
 
-		clienteService.saveFactura(factura);
+		usuarioService.saveFactura(factura);
 		status.setComplete();
 
 		flash.addFlashAttribute("success", "Factura creada con éxito!");
@@ -120,12 +124,12 @@ public class FacturaController {
 	@GetMapping("/eliminar/{id}")
 	public String eliminar(@PathVariable(value="id") Long id , RedirectAttributes flash) {
 		
-		Factura factura = clienteService.findFacturaById(id);
+		Factura factura = usuarioService.findFacturaById(id);
 		
 		if(factura  != null) {
 			clienteService.deleteFactura(id);
 			flash.addFlashAttribute("success", "Factura eliminada satisfactoriamente");
-			return "redirect:/ver/" + factura.getCliente().getId();
+			return "redirect:/ver/" + factura.getUsuario().getId();
 		}
 		
 		flash.addAttribute("error", "La factura no existe en la base de datos , no se pudo eliminar");
