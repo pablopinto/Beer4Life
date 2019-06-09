@@ -185,7 +185,7 @@ public class ClienteController {
 			flash.addFlashAttribute("error", "El id del cliente no puede ser cero");
 			return "redirect:/listar";
 		}
-		
+		System.out.println(usuario.getId()); 
 		model.put("cliente", usuario);
 		model.put("titulo", "Editar Cliente");
 		return "form";
@@ -220,13 +220,10 @@ public class ClienteController {
 
 			String uniqueFilename = UploadFileService.copy(foto);
 
-//			Path  directorioRecursos = Paths.get("src//main//resources//static//upload"); Ubicacion de guardado de imagenes en ruta local del proyecto
-//			String rootPath = directorioRecursos.toFile().getAbsolutePath();
 
-//			String rootPath = "C://Temp//uploads"; // Ruta externa al proyecto
 
 			flash.addFlashAttribute("info", "Has subido correctamente '" + foto.getOriginalFilename() + "'");
-//			flash.addFlashAttribute("info" , "Has subido correctamente '" + rootAbsolutePath + "'"); // Para comprobar que efectivamente el archivo se esta subiendo con el UUID
+			
 			usuario.setFoto(uniqueFilename);
 
 		}
