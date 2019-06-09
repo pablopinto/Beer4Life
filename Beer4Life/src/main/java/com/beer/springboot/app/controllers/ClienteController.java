@@ -168,7 +168,10 @@ public class ClienteController {
 	}
 
 	@RequestMapping(value = "/form/{id}")
-	public String editar(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
+	public String editar(
+			@PathVariable(value = "id") Long id, 
+			Map<String, Object> model, 
+			RedirectAttributes flash) {
 
 		Usuario usuario = null;
 
@@ -182,6 +185,7 @@ public class ClienteController {
 			flash.addFlashAttribute("error", "El id del cliente no puede ser cero");
 			return "redirect:/listar";
 		}
+		
 		model.put("cliente", usuario);
 		model.put("titulo", "Editar Cliente");
 		return "form";
@@ -227,6 +231,8 @@ public class ClienteController {
 
 		}
 		String bcryptPassword = passwordEncoder.encode(pass);
+		System.out.println(usuario.getId());
+		
 		String mensajeFlash = (usuario.getId() != null) ? "Cliente editado con exito" : "Cliente creado con exito";
 		
 		usuario.setEnabled(enabled);

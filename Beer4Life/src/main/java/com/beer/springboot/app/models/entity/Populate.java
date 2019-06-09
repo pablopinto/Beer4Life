@@ -18,8 +18,8 @@ public class Populate implements Serializable{
 	BigDecimal bd = new BigDecimal(input).setScale(2, RoundingMode.HALF_UP);
 	
 	@Id
-	private int id;
-	private  String name;
+	private Long id;
+	private String name;
 	private String tags;
 	private String brewery;
 	private String city;
@@ -32,10 +32,10 @@ public class Populate implements Serializable{
 	
 	
 	
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getName() {

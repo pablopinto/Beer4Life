@@ -118,7 +118,7 @@ public class FacturaController {
 
 		flash.addFlashAttribute("success", "Factura creada con éxito!");
 
-		return "redirect:/ver/" + factura.getCliente().getId();
+		return "redirect:/ver/" + factura.getUsuario().getId();
 	}
 	
 	@GetMapping("/eliminar/{id}")

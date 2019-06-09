@@ -18,8 +18,8 @@
 							response($.map(data, function(item) {
 								return {
 									value : item.id,
-									label : item.nombre,
-									precio : item.precio,
+									label : item.name,
+									precio : item.price,
 								};
 							}));
 						},
@@ -29,7 +29,7 @@
 					//$("#buscar_producto").val(ui.item.label);
 
 					if(itemsHelper.hasProducto(ui.item.value)){
-						itemsHelper.incrementaCantidad(ui.item.value, ui.item.precio);
+						itemsHelper.incrementaCantidad(ui.item.value, ui.item.price);
 						return false;
 					}
 					

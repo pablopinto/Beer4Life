@@ -11,7 +11,7 @@
 			<div class="card-body">
 				<h4 class="card-title">
 					<a class="btn btn-light"
-						th:href="@{'/ver/' + ${factura.cliente.id}}"
+						th:href="@{'/ver/' + ${factura.usuario.id}}"
 						th:text="'&laquo; volver'"></a>
 				</h4>
 
@@ -23,7 +23,7 @@
 							th:text="'Cliente'"></label>
 						<div class="col-sm-6">
 							<input name="cliente"
-								th:value="${factura.cliente.nombre} + ' ' + ${factura.cliente.apellido}"
+								th:value="${factura.usuario.name} + ' ' + ${factura.usuario.lastName}"
 								class="form-control" disabled='disabled' />
 						</div>
 					</div>
