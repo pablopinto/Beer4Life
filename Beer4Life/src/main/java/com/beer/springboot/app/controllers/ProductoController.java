@@ -29,10 +29,10 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.beer.springboot.app.models.entity.Cliente;
 import com.beer.springboot.app.models.entity.Populate;
-import com.beer.springboot.app.models.service.IClienteService;
+import com.beer.springboot.app.models.entity.Usuario;
 import com.beer.springboot.app.models.service.IPopulateService;
+import com.beer.springboot.app.models.service.IUsuarioService;
 import com.beer.springboot.app.util.paginator.PageRender;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -45,10 +45,10 @@ public class ProductoController {
 	protected final Log logger = LogFactory.getLog(this.getClass());
 
 	@Autowired
-	private IClienteService clienteService;
-
-	@Autowired
 	private IPopulateService populateService;
+	
+	@Autowired
+	private IUsuarioService userService;
 
 
 	@RequestMapping(value = { "/main", "/" }, method = RequestMethod.GET)
@@ -57,6 +57,13 @@ public class ProductoController {
 			throws JsonParseException, JsonMappingException, MalformedURLException, IOException {
 
 		Object data = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		Usuario usuario = userService.findByUsername((String) data);
+		
+		if(usuario == null) {
+			usuario = new Usuario();
+			usuario.setId((long) 0);
+		}
 
 		Pageable pageRequest = PageRequest.of(page, 6);
 
@@ -66,6 +73,7 @@ public class ProductoController {
 
 		model.addAttribute("titulo", "Listado de productos");
 		model.addAttribute("populate", populate);
+		model.addAttribute("user", usuario);
 		model.addAttribute("page", pageRender);
 		model.addAttribute("data", data);
 

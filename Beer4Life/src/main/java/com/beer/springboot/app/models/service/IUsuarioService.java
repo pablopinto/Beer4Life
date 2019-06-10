@@ -18,6 +18,8 @@ public interface IUsuarioService {
 	public void save(Usuario usuario);
 
 	public Usuario findOne(Long id);
+	
+	public Usuario findByUsername(String term);
 
 	public Usuario fetchByIdWithFacturas(Long id);
 

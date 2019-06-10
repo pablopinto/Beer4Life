@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.JOptionPane;
 import javax.validation.Valid;
 
 import org.apache.commons.logging.Log;
@@ -90,8 +91,16 @@ public class ClienteController {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping(value = "/ver/{id}")
 	public String ver(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
-
-		Usuario usuario = usuarioDao.fetchByIdWithFacturas(id); // clienteService.findOne(id);
+		
+		Object data = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		Usuario usuario = usuarioService.findByUsername((String) data);
+		if (id != usuario.getId()) {
+			flash.addFlashAttribute("error", "No puede usted acceder a un perfil que no sea el suyo");
+			return "redirect:/ver/{id}";
+		}else if (id == usuario.getId()) {
+		
+		usuario = usuarioDao.fetchByIdWithFacturas(id); // clienteService.findOne(id);
 		if (usuario == null) {
 			flash.addFlashAttribute("error", "El cliente no existe en la base de datos");
 			return "redirect:/listar";
@@ -100,8 +109,8 @@ public class ClienteController {
 		model.put("cliente", usuario);
 		model.put("titulo", "Detalles del cliente " + usuario.getName());
 
+		}
 		return "ver";
-
 	}
 
 	@RequestMapping(value = { "/listar" }, method = RequestMethod.GET)

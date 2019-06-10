@@ -89,4 +89,9 @@ public class UsuarioServiceImp implements IUsuarioService {
 		return facturaDao.fetchByIdWithUsuarioWithItemFacturaWithProducto(id);
 	}
 
+	@Override
+	public Usuario findByUsername(String term) {
+		return usuarioDao.findByUsername(term);
+	}
+
 }
