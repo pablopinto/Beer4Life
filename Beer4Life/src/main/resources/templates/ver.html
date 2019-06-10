@@ -15,7 +15,7 @@
 			<div class="card-body">
 
 				<h4 class="card-title">
-					<a sec:authorize="hasRole('ROLE_ADMIN')"
+					<a sec:authorize="hasRole('ROLE_USER')"
 						class="btn btn-primary btn-xs"
 						th:href="@{'/factura/form/' + ${cliente.id}}"
 						th:text="'crear factura'"></a>
@@ -44,8 +44,8 @@
 							<th>Descripcion</th>
 							<th>Fecha</th>
 							<th>Total</th>
-							<th sec:authorize="hasRole('ROLE_ADMIN')">Ver</th>
-							<th sec:authorize="hasRole('ROLE_ADMIN')">Eliminar</th>
+							<th sec:authorize="hasRole('ROLE_USER')">Ver</th>
+							<th sec:authorize="hasRole('ROLE_USER')">Eliminar</th>
 						</tr>
 					</thead>
 
@@ -55,11 +55,11 @@
 							<td th:text="${facturas.descripcion}"></td>
 							<td th:text="${facturas.createAt}"></td>
 							<td th:text="${facturas.total}"></td>
-							<td sec:authorize="hasRole('ROLE_ADMIN')"><a
+							<td sec:authorize="hasRole('ROLE_USER')"><a
 								class="btn btn-primary btn-xs"
 								th:href="@{'/factura/ver/' + ${facturas.id}}"
 								th:text="'detalle'"></a></td>
-							<td sec:authorize="hasRole('ROLE_ADMIN')"><a
+							<td sec:authorize="hasRole('ROLE_USER')"><a
 								class="btn btn-danger btn-xs"
 								th:href="@{'/factura/eliminar/' + ${facturas.id}}"
 								th:text="'eliminar'"

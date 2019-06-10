@@ -71,7 +71,6 @@
 
 							</div></li>
 						<li><a sec:authorize="hasRole('ROLE_USER')" th:href="@{/ver/} + ${user.id}" th:if="${user.id != null}"><span></span>Profile</a></li>
-						<li><a sec:authorize="hasRole('ROLE_USER')" href="#">Cart</a></li>
 					</ul>
 				</div>
 			</div>

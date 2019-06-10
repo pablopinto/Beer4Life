@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.JOptionPane;
 import javax.validation.Valid;
 
 import org.apache.commons.logging.Log;
