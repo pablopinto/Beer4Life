@@ -13,12 +13,12 @@
 			<div class="card-header" th:text="${titulo}"></div>
 			<div class="card-body">
 
-				<div th:object="${cliente}" th:remove="tag">
+				<div th:object="${producto}" th:remove="tag">
 					<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
 						<li th:each="err: ${#fields.errors('*')}" th:text="${err}"></li>
 					</ul>
 				</div>
-				<form th:action="@{/form}" th:object="${cliente}" method="post"
+				<form th:action="@{/form_producto}" th:object="${producto}" method="post"
 					enctype="multipart/form-data">
 					<div class="form-group row">
 						<label class="col-sm-2 col-form-label">Nombre</label>
@@ -30,67 +30,48 @@
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-sm-2 col-form-label">Apellido</label>
+						<label class="col-sm-2 col-form-label">Estilo</label>
 						<div class="col-sm-6">
-							<input type="text" th:field="*{lastName}" class="form-control"
+							<input type="text" th:field="*{tags}" class="form-control"
 								th:errorclass="'form-control alert-danger'" /> <small
 								class="form-text text-danger"
-								th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></small>
+								th:if="${#fields.hasErrors('tags')}" th:errors="*{tags}"></small>
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-sm-2 col-form-label">Email</label>
+						<label class="col-sm-2 col-form-label">Cervecero</label>
 						<div class="col-sm-6">
-							<input type="text" th:field="*{email}" class="form-control"
+							<input type="text" th:field="*{brewery}" class="form-control"
 								th:errorclass="'form-control alert-danger'" /> <small
 								class="form-text text-danger"
-								th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+								th:if="${#fields.hasErrors('brewery')}" th:errors="*{brewery}"></small>
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-sm-2 col-form-label">Usuario</label>
+						<label class="col-sm-2 col-form-label">Ciudad</label>
 						<div class="col-sm-6">
-							<input type="text" class="form-control" th:field="*{username}"
+							<input type="text" class="form-control" th:field="*{city}"
 								th:errorclass="'form-control alert-danger'" /> <small
 								class="form-text text-danger"
-								th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></small>
+								th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></small>
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-sm-2 col-form-label">Contraseña</label>
+						<label class="col-sm-2 col-form-label">Porcentaje Alcohol</label>
 						<div class="col-sm-6">
-							<input type="text" class="form-control" th:field="*{password}"
+							<input type="text" class="form-control" th:field="*{abv}"
 								th:errorclass="'form-control alert-danger'" /> <small
 								class="form-text text-danger"
-								th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></small>
-						</div>
-					</div>
-
-					<div class="form-group row">
-						<label for="file" class="col-sm-2 col-form-label">Foto</label>
-						<div class="col-sm-6">
-							<input type="file" name="file" class="form-control">
+								th:if="${#fields.hasErrors('abv')}" th:errors="*{abv}"></small>
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-sm-2 col-form-label">Rol</label>
+						<label class="col-sm-2 col-form-label">Precio</label>
 						<div class="col-sm-6">
-							<select class="form-control" name="rol" id="rol">
-								<option th:value="ROLE_USER" th:text="ROLE_USER"></option>
-								<option th:value="ROLE_ADMIN" th:text="ROLE_ADMIN"></option>
-							</select>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-2 col-form-label" >Activación</label>
-						<div class="col-sm-6">
-							<select class="form-control" th:field="*{enabled}" th:errorclass="'form-control alert-danger'">
-								<option th:value="false" th:text="Desactivado"></option>
-								<option th:value="true" th:text="Activado"></option>
-							</select>
-							<small
+							<input type="text" class="form-control" th:field="*{price}"
+								th:errorclass="'form-control alert-danger'" /> <small
 								class="form-text text-danger"
-								th:if="${#fields.hasErrors('enabled')}" th:errors="*{enabled}"></small>
+								th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></small>
 						</div>
 					</div>
 					<div class="form-group row">

@@ -55,16 +55,16 @@ public class ClienteController {
 
 	@Autowired
 	private IUsuarioDao usuarioDao;
-	
+
 	@Autowired
 	private IUsuarioService usuarioService;
 
 	@Autowired
 	private IUploadFileService UploadFileService;
-	
+
 	@Autowired
 	private IRegisterService registerService;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
@@ -89,10 +89,7 @@ public class ClienteController {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping(value = "/ver/{id}")
-	public String ver(
-			@PathVariable(value = "id") Long id, 
-			Map<String, Object> model, 
-			RedirectAttributes flash) {
+	public String ver(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 
 		Usuario usuario = usuarioDao.fetchByIdWithFacturas(id); // clienteService.findOne(id);
 		if (usuario == null) {
@@ -107,10 +104,9 @@ public class ClienteController {
 
 	}
 
-	@RequestMapping(value = { "/listar"}, method = RequestMethod.GET)
+	@RequestMapping(value = { "/listar" }, method = RequestMethod.GET)
 	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
-			Authentication authentication,
-			HttpServletRequest request) {
+			Authentication authentication, HttpServletRequest request) {
 
 		if (authentication != null) {
 			logger.info("Hola usuario , tu username es:".concat(authentication.getName()));
@@ -129,18 +125,21 @@ public class ClienteController {
 		} else {
 			logger.info("Hola ".concat(auth.getName()).concat(" NO tienes acceso"));
 		}
-		
-		SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(request, "");
-		
-		if(securityContext.isUserInRole("ROLE_ADMIN")) {
-			logger.info("Usando SecurityContextHolderAwareRequestWrapper -> Hola: ".concat(auth.getName()).concat(" tienes acceso"));
-		}else {
-			logger.info("Usando SecurityContextHolderAwareRequestWrapper -> Hola: ".concat(auth.getName()).concat(" NO tienes acceso"));
+
+		SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(request,
+				"");
+
+		if (securityContext.isUserInRole("ROLE_ADMIN")) {
+			logger.info("Usando SecurityContextHolderAwareRequestWrapper -> Hola: ".concat(auth.getName())
+					.concat(" tienes acceso"));
+		} else {
+			logger.info("Usando SecurityContextHolderAwareRequestWrapper -> Hola: ".concat(auth.getName())
+					.concat(" NO tienes acceso"));
 		}
-		
-		if(request.isUserInRole("ROLE_ADMIN")) {
+
+		if (request.isUserInRole("ROLE_ADMIN")) {
 			logger.info("Usando HttpServletRequest -> Hola: ".concat(auth.getName()).concat(" tienes acceso"));
-		}else {
+		} else {
 			logger.info("Usando HttpServletRequest -> Hola: ".concat(auth.getName()).concat(" NO tienes acceso"));
 		}
 
@@ -156,7 +155,7 @@ public class ClienteController {
 		return "listar";
 
 	}
-	
+
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/form")
 	public String crear(Map<String, Object> model) {
@@ -168,10 +167,7 @@ public class ClienteController {
 	}
 
 	@RequestMapping(value = "/form/{id}")
-	public String editar(
-			@PathVariable(value = "id") Long id, 
-			Map<String, Object> model, 
-			RedirectAttributes flash) {
+	public String editar(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 
 		Usuario usuario = null;
 
@@ -185,7 +181,6 @@ public class ClienteController {
 			flash.addFlashAttribute("error", "El id del cliente no puede ser cero");
 			return "redirect:/listar";
 		}
-		System.out.println(usuario.getId()); 
 		model.put("cliente", usuario);
 		model.put("titulo", "Editar Cliente");
 		return "form";
@@ -193,17 +188,11 @@ public class ClienteController {
 
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/form", method = RequestMethod.POST)
-	public String guardar(
-			@Valid Usuario usuario, 
-			@Valid Role roles,
-			BindingResult result, 
-			Model model,
-			@RequestParam(value="password", required=true) String pass,
-			@RequestParam(value="enabled", required=true) Boolean enabled,
-			@RequestParam(value="rol", required=true) String rol,
-			@RequestParam("file") MultipartFile foto, 
-			RedirectAttributes flash, 
-			SessionStatus status) throws IOException {
+	public String guardar(@Valid Usuario usuario, @Valid Role roles, BindingResult result, Model model,
+			@RequestParam(value = "password", required = true) String pass,
+			@RequestParam(value = "enabled", required = true) Boolean enabled,
+			@RequestParam(value = "rol", required = true) String rol, @RequestParam("file") MultipartFile foto,
+			RedirectAttributes flash, SessionStatus status) throws IOException {
 
 		if (result.hasErrors()) {
 			model.addAttribute("titulo", "Formulario de Cliente");
@@ -220,32 +209,30 @@ public class ClienteController {
 
 			String uniqueFilename = UploadFileService.copy(foto);
 
-
-
 			flash.addFlashAttribute("info", "Has subido correctamente '" + foto.getOriginalFilename() + "'");
-			
+
 			usuario.setFoto(uniqueFilename);
 
 		}
 		String bcryptPassword = passwordEncoder.encode(pass);
-		System.out.println(usuario.getId());
-		
+
 		String mensajeFlash = (usuario.getId() != null) ? "Cliente editado con exito" : "Cliente creado con exito";
-		
+
 		usuario.setEnabled(enabled);
 		usuario.setPassword(bcryptPassword);
 		usuarioDao.save(usuario);
-		
+
 //		Role role = new Role();
 		roles.setUser_id(usuario.getId());
 		roles.setAuthority(rol);
 		registerService.save(roles);
-		
+
 		status.setComplete();
 		flash.addFlashAttribute("success", mensajeFlash);
 		return "redirect:listar";
 
 	}
+
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/eliminar/{id}")
 	public String eliminar(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
@@ -254,9 +241,11 @@ public class ClienteController {
 
 			usuarioService.delete(id);
 			flash.addFlashAttribute("success", "Cliente eliminado con exito!");
-
-			if (UploadFileService.delete(usuario.getFoto())) {
-				flash.addFlashAttribute("info", "Foto" + usuario.getFoto() + "eliminada con exito!");
+			
+			if (usuario.getFoto() != null) {
+				if (UploadFileService.delete(usuario.getFoto())) {
+					flash.addFlashAttribute("info", "Foto" + usuario.getFoto() + "eliminada con exito!");
+				}
 			}
 		}
 
@@ -279,7 +268,7 @@ public class ClienteController {
 		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
 
 		return authorities.contains(new SimpleGrantedAuthority(role));
-		
+
 //		for (GrantedAuthority authority : authorities) {
 //			if (role.equals(authority.getAuthority())) {
 //				logger.info("Usuario: ".concat(auth.getName()).concat(" Rol: ".concat(authority.getAuthority())));

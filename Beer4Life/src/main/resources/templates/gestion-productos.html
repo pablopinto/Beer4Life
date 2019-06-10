@@ -3,17 +3,17 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 
-<head th:replace="layout/layout-s :: head"></head>
+<head th:replace="layout/layout :: head"></head>
 <body>
 
-	<div class="jumbotron">
-		<div class="container text-center">
-			<h1>Beer4Life</h1>
-			<p>Online Store</p>
-		</div>
-	</div>
+<!-- 	<div class="jumbotron"> -->
+<!-- 		<div class="container text-center"> -->
+<!-- 			<h1>Beer4Life</h1> -->
+<!-- 			<p>Online Store</p> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
 	
-	<header th:replace="layout/layout-s :: header"></header>
+	<header th:replace="layout/layout :: header"></header>
 	
 	<div class="container py-4">
 
@@ -30,10 +30,12 @@
 					<thead>
 						<tr>
 							<th sec:authorize="hasRole('ROLE_USER')" >id</th>
-							<th>fecha</th>
-							<th>nombre</th>
-							<th>precio</th>
-							<th sec:authorize="hasRole('ROLE_ADMIN')">crear factura</th>
+							<th>Nombre</th>
+							<th>Estilo</th>
+							<th>Cervezero</th>
+							<th>Ciudad</th>
+							<th>Porcentaje Alcohol</th>
+							<th>Precio</th>
 							<th sec:authorize="hasRole('ROLE_ADMIN')">editar</th>
 							<th sec:authorize="hasRole('ROLE_ADMIN')">eliminar</th>
 						</tr>
@@ -42,24 +44,25 @@
 					<tbody>
 						<tr th:each="productos: ${productos}">
 							<td sec:authorize="hasRole('ROLE_USER')" ><a class="btn btn-primary btn-xs"
-								th:href="@{/ver/} + ${productos.id}" th:text="${productos.id}"></a></td>
-								<td th:text="${productos.createAt}"></td>
-							<td th:text="${productos.nombre}"></td>
-							<td th:text="${productos.precio}"></td>
-							<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-success btn-xs"
-								th:href="@{'/factura/form/' + ${productos.id}}"
-								th:text="'crear factura'"></a></td>
+								th:href="@{/ver-producto/} + ${productos.id}" th:text="${productos.id}"></a></td>
+							<td th:text="${productos.name}"></td>
+							<td th:text="${productos.tags}"></td>
+							<td th:text="${productos.brewery}"></td>
+							<td th:text="${productos.city}"></td>
+							<td th:text="${productos.abv}"></td>
+							<td th:text="${productos.price}"></td>
+			
 							<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-primary btn-xs"
-								th:href="@{/form/} + ${productos.id}" th:text="'editar'"></a></td>
+								th:href="@{/form_producto/} + ${productos.id}" th:text="'editar'"></a></td>
 							<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-danger btn-xs"
-								th:href="@{/eliminar/} + ${productos.id}" th:text="'eliminar'"
+								th:href="@{/eliminar_producto/} + ${productos.id}" th:text="'eliminar'"
 								onclick="return confirm('Esta seguro de llevar a cabo la accion');"></a></td>
 						</tr>
 					</tbody>
 
 				</table>
 
-				<nav th:replace="paginator-nav :: paginator"></nav>
+				<nav th:replace="paginator/paginator-nav :: paginator"></nav>
 			</div>
 		</div>
 	</div>

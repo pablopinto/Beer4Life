@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,25 +14,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.beer.springboot.app.models.dao.IUsuarioDao;
 import com.beer.springboot.app.models.entity.Cliente;
 import com.beer.springboot.app.models.entity.Populate;
-import com.beer.springboot.app.models.entity.Producto;
 import com.beer.springboot.app.models.service.IClienteService;
 import com.beer.springboot.app.models.service.IPopulateService;
-import com.beer.springboot.app.models.service.IProductoService;
 import com.beer.springboot.app.util.paginator.PageRender;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -44,28 +45,23 @@ public class ProductoController {
 	protected final Log logger = LogFactory.getLog(this.getClass());
 
 	@Autowired
-	private IProductoService productoService;
-
-	@Autowired
 	private IClienteService clienteService;
-	
+
 	@Autowired
 	private IPopulateService populateService;
 
-	@Autowired
-	IUsuarioDao usuariodao;
 
-	@RequestMapping(value = {"/main", "/"}, method = RequestMethod.GET)
+	@RequestMapping(value = { "/main", "/" }, method = RequestMethod.GET)
 	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
 			HttpServletRequest request)
 			throws JsonParseException, JsonMappingException, MalformedURLException, IOException {
 
 		Object data = SecurityContextHolder.getContext().getAuthentication().getName();
-	
+
 		Pageable pageRequest = PageRequest.of(page, 6);
 
 		Page<Populate> populate = populateService.findAll(pageRequest);
-		
+
 		PageRender<Populate> pageRender = new PageRender<Populate>("/main", populate);
 
 		model.addAttribute("titulo", "Listado de productos");
@@ -83,32 +79,88 @@ public class ProductoController {
 
 		Pageable pageRequest = PageRequest.of(page, 6);
 
-		Page<Producto> productos = productoService.findAll(pageRequest);
+		Page<Populate> populate = populateService.findAll(pageRequest);
 
-		PageRender<Producto> pageRender = new PageRender<Producto>("/gestion-productos", productos);
+		PageRender<Populate> pageRender = new PageRender<Populate>("/gestion-productos", populate);
 		model.addAttribute("titulo", "Listado de productos");
-		model.addAttribute("productos", productos);
+		model.addAttribute("productos", populate);
 		model.addAttribute("page", pageRender);
 
 		return "gestion-productos";
 
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@GetMapping(value = "/ver-carrito/{id}")
-	public String ver(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
+	@RequestMapping(value = "/form_producto/{id}")
+	public String editar(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 
-		Cliente cliente = clienteService.fetchByIdWithFacturas(id);
-//		Cliente cliente = clienteService.findOne(id);
-		if (cliente == null) {
-			flash.addFlashAttribute("error", "El cliente no existe en la base de datos");
-			return "redirect:/main";
+		Populate populate = null;
+
+		if (id > 0) {
+			populate = populateService.findOne(id);
+			if (populate == null) {
+				flash.addFlashAttribute("error", "El id del producto no existe en la base de datos");
+				return "redirect:/gestion-productos";
+			}
+		} else {
+			flash.addFlashAttribute("error", "El id del producto no puede ser cero");
+			return "redirect:/gestion-productos";
+		}
+		model.put("producto", populate);
+		model.put("titulo", "Editar Producto");
+		return "form-producto";
+	}
+
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(value = "/form_producto", method = RequestMethod.POST)
+	public String guardar_producto(@Valid Populate populate, BindingResult result, Model model,
+			RedirectAttributes flash, SessionStatus status) throws IOException {
+
+		if (result.hasErrors()) {
+			model.addAttribute("titulo", "Formulario de Cliente");
+			return "form";
 		}
 
-		model.put("cliente", cliente);
-		model.put("titulo", "Detalles del cliente " + cliente.getNombre());
+		String mensajeFlash = (populate.getId() != null) ? "Cliente editado con exito" : "Cliente creado con exito";
 
-		return "ver-carrito";
+		populateService.save(populate);
+		status.setComplete();
+		flash.addFlashAttribute("success", mensajeFlash);
+		return "redirect:gestion-productos";
+
+	}
+
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(value = "/eliminar_producto/{id}")
+	public String eliminar(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
+		if (id > 0) {
+			Populate populate = populateService.findOne(id);
+			
+			if (populate != null) {
+				populateService.delete(id);
+				flash.addFlashAttribute("success", "Producto eliminado con exito!");
+			} else if(populate == null) {
+				flash.addFlashAttribute("error", "El producto no existe!");
+			}
+		}
+
+		return "redirect:/gestion-productos";
+	}
+
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@GetMapping(value = "/ver-producto/{id}")
+	public String ver(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
+
+		Populate populate = populateService.findOne(id);
+
+		if (populate == null) {
+			flash.addFlashAttribute("error", "El producto no existe en la base de datos");
+			return "redirect:/ver-producto";
+		}
+
+		model.put("populate", populate);
+		model.put("titulo", "Detalles del producto " + populate.getName());
+
+		return "ver-producto";
 
 	}
 
@@ -122,7 +174,7 @@ public class ProductoController {
 		Pageable pageRequest = PageRequest.of(page, 9);
 
 		Page<Populate> populate = populateService.findAll(pageRequest);
-		
+
 		PageRender<Populate> pageRender = new PageRender<Populate>("/shop", populate);
 
 		model.addAttribute("titulo", "Listado de productos");
@@ -133,7 +185,7 @@ public class ProductoController {
 		return "shop";
 
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping(value = "/populate")
 	public String populate(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
@@ -142,12 +194,11 @@ public class ProductoController {
 
 		for (int i = 1; i < 310; i++) {
 
-			final String uri = "http://localhost:8090/api/v1/beer/"+i;
+			final String uri = "http://localhost:8090/api/v1/beer/" + i;
 			ObjectMapper mapper = new ObjectMapper();
 			Populate obj = mapper.readValue(new URL(uri), Populate.class);
 			model.addAttribute(obj);
 			populateService.save(obj);
-			
 
 		}
 		return "redirect:main";
@@ -156,9 +207,9 @@ public class ProductoController {
 
 	@GetMapping(value = "/contact")
 	public String contact(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
-			HttpServletRequest request){
+			HttpServletRequest request) {
 		return "contact";
 
 	}
-	
+
 }

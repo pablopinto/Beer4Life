@@ -10,11 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.beer.springboot.app.models.dao.IFacturaDao;
 import com.beer.springboot.app.models.dao.IPopulateDao;
-import com.beer.springboot.app.models.dao.IProductoDao;
 import com.beer.springboot.app.models.dao.IUsuarioDao;
 import com.beer.springboot.app.models.entity.Factura;
 import com.beer.springboot.app.models.entity.Populate;
-import com.beer.springboot.app.models.entity.Producto;
 import com.beer.springboot.app.models.entity.Usuario;
 
 
@@ -23,9 +21,6 @@ public class UsuarioServiceImp implements IUsuarioService {
 	
 	@Autowired
 	private IUsuarioDao usuarioDao;
-	
-	@Autowired
-	private IProductoDao productoDao;
 	
 	@Autowired
 	private IFacturaDao facturaDao;
