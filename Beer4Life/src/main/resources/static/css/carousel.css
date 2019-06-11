@@ -96,7 +96,7 @@ body {
 	position: absolute;
 	top: 0;
 	left: 25%;
-	margin:auto;
+	margin: 0 auto;
 	min-width: 50%;
 	height: 32rem;
 }

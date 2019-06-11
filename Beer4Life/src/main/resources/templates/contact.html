@@ -119,10 +119,10 @@
               <span id='player'></span>
           </div><!-- /.col-lg-4 -->
           <div class="col-lg-4">
-            <img class="rounded-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
-            <h2>Heading</h2>
-            <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-            <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+            <img class="rounded-circle" th:src="@{/images/ThatsMe.png}" alt="Generic placeholder image" width="140" height="140">
+            <h2>El repositorio</h2>
+            <p>Una manera rapida y sencilla de llegar al lugar donde se aloja este codigo.</p>
+            <p><a class="btn btn-secondary" href="https://github.com/pablopinto/Final-DAW-Project" role="button">Ir &raquo;</a></p>
           </div><!-- /.col-lg-4 -->
         </div><!-- /.row -->
 
@@ -133,11 +133,12 @@
 
         <div class="row featurette">
           <div class="col-md-7">
-            <h2 class="featurette-heading">First featurette heading. <span class="text-muted">It'll blow your mind.</span></h2>
-            <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+            <h2 class="featurette-heading">Una excelente opcion para escoger cerveza. <span class="text-muted">Una pena que el Front sea pesimo.</span></h2>
+            <p class="lead">Mis habilidades estan mas presentes en la parte del back que en el front pero se ha hecho lo que se ha podido en ambos aspectos ,
+            				aun asi perdon por el horrible diseño.</p>
           </div>
           <div class="col-md-5">
-            <img class="featurette-image img-fluid mx-auto" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+            <img class="featurette-image img-fluid mx-auto" th:src="@{/images/beer.png}" alt="Generic placeholder image">
           </div>
         </div>
 
@@ -145,11 +146,11 @@
 
         <div class="row featurette">
           <div class="col-md-7 order-md-2">
-            <h2 class="featurette-heading">Oh yeah, it's that good. <span class="text-muted">See for yourself.</span></h2>
-            <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+            <h2 class="featurette-heading">Y para finalizar.  <span class="text-muted">Las tecnologias usadas.</span></h2>
+            <p class="lead">Este proyecto esta llevado a cabo con Spring Boot 5 , Thymeleaf , JavaScript , Jquery , JqueryAjax, Scss , Bootstap 3,4 y MySql.</p>
           </div>
           <div class="col-md-5 order-md-1">
-            <img class="featurette-image img-fluid mx-auto" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+            <img class="featurette-image img-fluid mx-auto" th:src="@{/images/spring.png}" alt="Generic placeholder image">
           </div>
         </div>
 
@@ -157,13 +158,10 @@
 
         <div class="row featurette">
           <div class="col-md-7">
-            <h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Checkmate.</span></h2>
-            <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-            <iframe width="480" height="360" src="https://www.youtube.com/embed/_MN940PJKPo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <h2 class="featurette-heading">Y como no un buen video informativo.<span class="text-muted">A quien no le gusta saber como se produce este manjar.</span></h2>
           </div>
           <div class="col-md-5">
-            <img class="featurette-image img-fluid mx-auto" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
-          </div>
+    <iframe width="480" height="360" src="https://www.youtube.com/embed/_MN940PJKPo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
 
         <hr class="featurette-divider">
