@@ -46,10 +46,9 @@ public class ProductoController {
 
 	@Autowired
 	private IPopulateService populateService;
-	
+
 	@Autowired
 	private IUsuarioService userService;
-
 
 	@RequestMapping(value = { "/main", "/" }, method = RequestMethod.GET)
 	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
@@ -57,10 +56,10 @@ public class ProductoController {
 			throws JsonParseException, JsonMappingException, MalformedURLException, IOException {
 
 		Object data = SecurityContextHolder.getContext().getAuthentication().getName();
-		
+
 		Usuario usuario = userService.findByUsername((String) data);
-		
-		if(usuario == null) {
+
+		if (usuario == null) {
 			usuario = new Usuario();
 			usuario.setId((long) 0);
 		}
@@ -142,11 +141,11 @@ public class ProductoController {
 	public String eliminar(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
 		if (id > 0) {
 			Populate populate = populateService.findOne(id);
-			
+
 			if (populate != null) {
 				populateService.delete(id);
 				flash.addFlashAttribute("success", "Producto eliminado con exito!");
-			} else if(populate == null) {
+			} else if (populate == null) {
 				flash.addFlashAttribute("error", "El producto no existe!");
 			}
 		}
@@ -179,6 +178,13 @@ public class ProductoController {
 
 		Object data = SecurityContextHolder.getContext().getAuthentication().getName();
 
+		Usuario usuario = userService.findByUsername((String) data);
+
+		if (usuario == null) {
+			usuario = new Usuario();
+			usuario.setId((long) 0);
+		}
+
 		Pageable pageRequest = PageRequest.of(page, 9);
 
 		Page<Populate> populate = populateService.findAll(pageRequest);
@@ -187,6 +193,7 @@ public class ProductoController {
 
 		model.addAttribute("titulo", "Listado de productos");
 		model.addAttribute("populate", populate);
+		model.addAttribute("user", usuario);
 		model.addAttribute("page", pageRender);
 		model.addAttribute("data", data);
 

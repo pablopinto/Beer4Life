@@ -31,35 +31,34 @@
 			<!-- 							</div> -->
 			<!-- 						</div> -->
 
-			<div class="panel-default well" th:each="product : ${populate}">
-				<div class="panel-heading">
-					<h1 th:text="${product.name}"></h1>
-				</div>
-				<h3>Tipo: [[${product.tags}]]</h3>
-				<h3>Porcentaje de Alcohol: [[${product.abv}]] %</h3>
-				<h3>Productor: [[${product.brewery}]]</h3>
-				<div class="row panel-footer">
-					<div th:inline="text" class="col-md-2">Price:
-						[[${product.price}]] $</div>
-					<div th:inline="text" class="col-md-9">In Stock:</div>
-					<a th:href="@{'/shoppingCart/addProduct/{id}'(id=${product.id})}"
-						class="col-md-1">
-						<button type="button" class="btn btn-primary" th:text="Buy">Buy</button>
-					</a>
-				</div>
-				<br></br>
-			</div>
+<!-- 			<div class="panel-default well" th:each="product : ${populate}"> -->
+<!-- 				<div class="panel-heading"> -->
+<!-- 					<h1 th:text="${product.name}"></h1> -->
+<!-- 				</div> -->
+<!-- 				<h3>Tipo:</h3> -->
+<!-- 				<h3>Porcentaje de Alcohol: %</h3> -->
+<!-- 				<h3>Productor: </h3> -->
+<!-- 				<div class="row panel-footer"> -->
+<!-- 					<div th:inline="text" class="col-md-2">Price: -->
+<!-- 					$</div> -->
+<!-- 					<div th:inline="text" class="col-md-9">In Stock:</div> -->
+<!-- 					<a th:href="@{'/shoppingCart/addProduct/{id}'(id=${product.id})}" -->
+<!-- 						class="col-md-1"> -->
+<!-- 						<button type="button" class="btn btn-primary" th:text="Buy">Buy</button> -->
+<!-- 					</a> -->
+<!-- 				</div> -->
+<!-- 				<br></br> -->
+<!-- 			</div> -->
 
 			<div class="panel-default well" th:each="product : ${populate}">
-				<div class="panel-heading text-center text-uppercase font-weight-bold" th:text="${product.name}"></div>
+				<h3 class="panel-heading text-center text-uppercase font-weight-bold" th:text="${product.name}"></h3>
 				<div class="panel-body text-center">
 					<h5 class="panel-title text-center">Estilo: [[${product.tags}]]</h5>
-					<p class="panel-text text-center">Productor: [[${product.brewery}]]</p>
+					<p class="panel-text text-center">Cervecera: [[${product.brewery}]]</p>
 					<p class="panel-text text-center">Porcentaje de Alcohol: [[${product.abv}]] %</p>
-					<a href="#" class="btn btn-primary">Comprar</a>
+					<a th:href="@{/factura/form/} + ${user.id}" class="btn btn-primary">Comprar</a>
 				</div>
-				<div class="panel-footer text-muted">Price:
-						[[${product.price}]] $</div>
+				<div class="panel-footer text-muted">Price: [[${product.price}]] $</div>
 			</div>
 
 

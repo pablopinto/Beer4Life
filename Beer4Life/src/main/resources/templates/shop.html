@@ -11,23 +11,37 @@
 			<div class="row content">
 				<div class="col-sm-2 sidenav hidden-xs"
 					style="text-align: center; margin-bottom: 3%;">
-					<h1>TIPOS</h1>
+					<!-- 					<h2>Paginas</h2> -->
 					<nav th:replace="paginator/product-paginator :: paginator"></nav>
 					<br>
 				</div>
 				<br>
-				<div class="col"  th:each="product : ${populate}">
-					<div class="col-sm-3">
-						<div class="well">
-							<h4 th:text="${product.name}"></h4>
-							<p th:text="${product.id}"></p>
-						</div>
-					</div>
 
+				<div class="col" th:each="product : ${populate}">
+					<div class="col-sm-3">
+						<div class="panel-default well text-center">
+							<div class="panel-title text-center" th:text="${#strings.abbreviate(product.name,25)}"></div>
+						<div class="panel-body text-center">
+							<h5 class="panel-text text-center" th:text="${#strings.abbreviate(product.tags,25)}" ></h5>
+							<p class="panel-text text-center">Cervecera:[[${product.brewery}]]</p>
+							<p class="panel-text text-center">
+								Alcohol:[[${product.abv}]] %</p>
+							<a th:href="@{/factura/form/} + ${user.id}"
+								class="btn btn-primary">Comprar</a>
+						</div>
+						<div class="panel-footer text-muted">Price:[[${product.price}]]
+							$</div>
+					</div>
 				</div>
-				<div class="row"></div>
-				<div class="row"></div>
+
 			</div>
+
+			<div class="col-sm-4"></div>
+
+
+			<div class="row"></div>
+			<div class="row"></div>
+		</div>
 		</div>
 	</div>
 
