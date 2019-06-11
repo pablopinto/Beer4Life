@@ -209,7 +209,8 @@ public class ProductoController {
 
 		for (int i = 1; i < 310; i++) {
 
-			final String uri = "http://localhost:8090/api/v1/beer/" + i;
+//			final String uri = "http://localhost:8090/api/v1/beer/" + i;
+			final String uri = "https://beer4life-api.herokuapp.com/api/v1/beer/" + i;
 			ObjectMapper mapper = new ObjectMapper();
 			Populate obj = mapper.readValue(new URL(uri), Populate.class);
 			model.addAttribute(obj);
