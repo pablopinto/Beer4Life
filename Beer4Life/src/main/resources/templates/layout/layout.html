@@ -18,10 +18,13 @@
 <body>
 
 	<header th:fragment="header" class="fixed-top">
-	
-	
+
+
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-			<a class="navbar-brand" th:href="@{/main}">Logo</a>
+
+			<a class="navbar-brand" th:href="@{/main}"> <img
+				th:src="@{/images/beer4life.svg}" style="width: 50px;">
+			</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
 				data-target="#navbarNav" aria-controls="navbarNav"
 				aria-expanded="false" aria-label="Toggle navigation">
@@ -32,9 +35,13 @@
 					<li class="nav-item"><a class="nav-link" th:href="@{/main}">Home</a></li>
 					<li class="nav-item"><a class="nav-link" th:href="@{/shop}">Shop</a></li>
 					<li class="nav-item"><a class="nav-link" th:href="@{/contact}">Contact</a></li>
-					<li class="nav-item"><a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" th:href="@{/gestion-productos}">Admin Productos</a></li>
-					<li class="nav-item"><a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" th:href="@{/listar}">Admin Clientes</a></li>
-					<li class="nav-item"><a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" th:href="@{/populate}">Poblado Productos</a></li>
+					<li class="nav-item"><a sec:authorize="hasRole('ROLE_ADMIN')"
+						class="nav-link" th:href="@{/gestion-productos}">Admin
+							Productos</a></li>
+					<li class="nav-item"><a sec:authorize="hasRole('ROLE_ADMIN')"
+						class="nav-link" th:href="@{/listar}">Admin Clientes</a></li>
+					<li class="nav-item"><a sec:authorize="hasRole('ROLE_ADMIN')"
+						class="nav-link" th:href="@{/populate}">Poblado Productos</a></li>
 				</ul>
 				<ul class="navbar-nav navbar-right">
 
@@ -82,11 +89,6 @@
 			Usuario Logueado : <span sec:authentication="name"></span> | Rol: <span
 				sec:authentication="principal.authorities"></span>
 		</p>
-		<form class="form-inline">
-			Get deals: <input type="email" class="form-control" size="50"
-				placeholder="Email Address">
-			<button type="button" class="btn btn-danger">Sign Up</button>
-		</form>
 		<p>Online Store Copyright</p>
 		<script th:src="@{/js/jquery.min.js}"></script>
 		<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
