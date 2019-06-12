@@ -227,7 +227,11 @@ public class ClienteController {
 		String mensajeFlash = (usuario.getId() != null) ? "Cliente editado con exito" : "Cliente creado con exito";
 
 		usuario.setEnabled(enabled);
-		usuario.setPassword(bcryptPassword);
+		if(usuario.getId() != null) {
+			usuario.setPassword(pass);
+		} else if (usuario.getId() == null) {
+			usuario.setPassword(bcryptPassword);
+		}
 		usuarioDao.save(usuario);
 
 //		Role role = new Role();

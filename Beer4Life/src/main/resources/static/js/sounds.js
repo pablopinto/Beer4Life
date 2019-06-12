@@ -2,14 +2,10 @@
 function playRandomSound(){
 
       //An array to house all of the URLs of your sounds
-      var sounds = [ "http://www.mysite.com/1.wav",
-                     "http://www.mysite.com/2.wav",
-                     "http://www.mysite.com/3.wav",
-                     "http://www.mysite.com/4.wav",
-                     "http://www.mysite.com/5.wav",
-                     "http://www.mysite.com/6.wav",
-                     "http://www.mysite.com/7.wav",
-                     "http://www.mysite.com/8.wav"];
+      var sounds = [ "https://www.elongsound.com/images/mp3/pajaros_noctunos_en_la_lejania_1.mp3",
+                     "https://www.elongsound.com/images/mp3/pompa_pajaritos_1.mp3",
+                     "https://www.elongsound.com/images/mp3/velocidad_vuelta_larga.mp3",
+                     "https://www.elongsound.com/images/mp3/rompiendo_un_aparato_por_la_derecha.mp3"];
       
       //This line will select a random sound to play out of your provided URLS
       var soundFile = sounds[Math.floor(Math.random()*sounds.length)];
