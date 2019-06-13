@@ -111,7 +111,8 @@ public class ClienteController {
 		}
 		return "ver";
 	}
-
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value = { "/listar" }, method = RequestMethod.GET)
 	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
 			Authentication authentication, HttpServletRequest request) {
@@ -173,7 +174,8 @@ public class ClienteController {
 		model.put("titulo", "Formulario de Cliente");
 		return "form";
 	}
-
+	
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/form/{id}")
 	public String editar(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 

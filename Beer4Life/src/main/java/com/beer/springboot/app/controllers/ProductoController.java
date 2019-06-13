@@ -79,7 +79,8 @@ public class ProductoController {
 		return "main";
 
 	}
-
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value = "/gestion-productos", method = RequestMethod.GET)
 	public String listarAdmin(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
 			HttpServletRequest request) {
@@ -96,7 +97,8 @@ public class ProductoController {
 		return "gestion-productos";
 
 	}
-
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value = "/form_producto/{id}")
 	public String editar(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 
@@ -165,7 +167,7 @@ public class ProductoController {
 		return "redirect:/gestion-productos";
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@Secured("ROLE_USER")
 	@GetMapping(value = "/ver-producto/{id}")
 	public String ver(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 
