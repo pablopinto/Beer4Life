@@ -116,10 +116,22 @@ public class ProductoController {
 		model.put("titulo", "Editar Producto");
 		return "form-producto";
 	}
+	
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(value = "/form_producto")
+	public String crear_producto(Map<String, Object> model) {
+
+		Populate populate = new Populate();
+		model.put("producto", populate);
+		model.put("titulo", "Formulario de Producto");
+		return "form-producto";
+	}
+	
 
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/form_producto", method = RequestMethod.POST)
 	public String guardar_producto(@Valid Populate populate, BindingResult result, Model model,
+			@RequestParam(value = "id", required = true) Long id,
 			RedirectAttributes flash, SessionStatus status) throws IOException {
 
 		if (result.hasErrors()) {
@@ -127,8 +139,8 @@ public class ProductoController {
 			return "form";
 		}
 
-		String mensajeFlash = (populate.getId() != null) ? "Cliente editado con exito" : "Cliente creado con exito";
-
+		String mensajeFlash = (populate.getId() != null) ? "Producto editado con exito" : "Producto creado con exito";
+		populate.setId(id);
 		populateService.save(populate);
 		status.setComplete();
 		flash.addFlashAttribute("success", mensajeFlash);
