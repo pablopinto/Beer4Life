@@ -24,5 +24,11 @@ Una vez tengamos Eclipse , se llevara a cabo la instalacion de SpringBoot 4 , re
 </p>
 
 <h3 align="center">Instalando</h3>
+<p align="center">
 Para la ejecucion del proyecto , es necesario hacer una correcta configuracion previa del archivo application.properties
-<img src="https://github.com/pablopinto/Final-DAW-Project/blob/master/Beer4Life/src/main/resources/static/images/beer4life.png">
+Este debe estar formado como el mostrado a continuacion , y modificar exclusivamente los campos referentes al almacenamiento de base de datos.
+    <br>
+<img src="https://github.com/pablopinto/Final-DAW-Project/blob/master/Imagenes/application_properties.PNG">
+    <br>
+Cuando nos encontremos en desarrollo el campo **spring.jpa.hibernate.ddl-auto** debe estar en modalidad **create-drop** o en defecto **update**
+ </p>
