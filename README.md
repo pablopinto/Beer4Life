@@ -68,6 +68,30 @@ Cuando nos encontremos en desarrollo el campo **spring.jpa.hibernate.ddl-auto** 
     <br>
     <h3 align="center">Uso de la Aplicacion : Funciones de un Usuario Estandar</h3>
       <p align="center">
-  Las funcionalidades de un usuario estandar en beer4life , son , aparte del acceso a Home , Contact , Login y Register , el acceso a las siguientes rutas y funcionalidades
+  Las funcionalidades de un usuario estandar en beer4life , son , aparte del acceso a Home , Contact , Login y Register , el acceso a las siguientes rutas y funcionalidades.
+    </p>
+      <p align="center">
+  El usuario podra acceder a la tienda , en la cual tendra un listado de cervezas similar al que visulizamos en el Home, pero con una amplia gama de productos , con un paginador mediante el cual ir pudiendo navegar por todos los contenidos.
   </p>
-    
+    <h3 align="center">Shop</h3>
+  <img src="https://github.com/pablopinto/Final-DAW-Project/blob/master/Imagenes/register.PNG">
+  <br>
+    <p align="center">
+  Aparte de esto el usuario tendra acceso , tanto desde Home como Shop y Contact, acceso a su perfil , pero en ningun caso al de los demas usuarios.En este perfil el usuario podra visualizar su informacion asi como su foto , en caso de tenerla , visualizar las facturas para el usuario , crear facturas , ver el detalle de las facturas y eliminar las mismas.
+ </p>
+ <h3 align="center">Perfil</h3>
+  <img src="https://github.com/pablopinto/Final-DAW-Project/blob/master/Imagenes/register.PNG">
+  <br>
+    <p align="center">
+  En caso de que asi lo desee, el usuario podra crear sus facturas con la correspondientes informacion pertinente para la misma. Cliente , informacion la cual no se puede modificar , la Descripcion de la factura , Observaciones sobre la misma y se incluye un buscador , el cual va buscando segun las coincidencias encontradas con el texto introducido en el input. Una vez se confirme la introduccion de la misma , podremos visualizar el nombre del producto seleccionado , su precio y la cantidad que se quiere comprar , asi como el total del mismo y una opcion para eliminar el producto de la lista de asi ser necesario.
+ Por ultimo al final el Total de la factura.
+ </p>
+ <h3 align="center">Creacion Factura</h3>
+  <img src="https://github.com/pablopinto/Final-DAW-Project/blob/master/Imagenes/register.PNG">
+  <br>
+  <p align="center">
+Una vez creada la factura , podremos visualizar la informacion de la misma desde el boton detalle , mostrando los datos del cliente : nombre , apellidos y correo electronico. Datos de la factura , folio , descripcion de la misma y fecha de expedicion de la misma. Tambien podremos visualizar los datos de los productos previamente seleccionados asi como las observaciones sobre la misma y el total de la factura.
+ </p>
+ <h3 align="center">Detalle Factura</h3>
+  <img src="https://github.com/pablopinto/Final-DAW-Project/blob/master/Imagenes/register.PNG">
+  <br>
