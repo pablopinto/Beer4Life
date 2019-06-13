@@ -138,3 +138,5 @@ Una vez creada la factura , podremos visualizar la informacion de la misma desde
   <p align="center">
 Por ultimo tendremos como administrador la opcion Poblado Productos la cual le permite al administrador hacer un repoblado de la base de datos de productos por si se han añadido o modificado los productos de beer4life-api.
    </p>
+<h1 align="center">Autor</h1>
+<h3 align="center">Pablo Pinto</h1>
