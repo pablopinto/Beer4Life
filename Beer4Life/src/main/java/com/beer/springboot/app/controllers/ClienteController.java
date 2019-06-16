@@ -3,6 +3,7 @@ package com.beer.springboot.app.controllers;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -94,10 +95,10 @@ public class ClienteController {
 		Object data = SecurityContextHolder.getContext().getAuthentication().getName();
 		
 		Usuario usuario = usuarioService.findByUsername((String) data);
-		if (id != usuario.getId()) {
+		if (!hasRole("ROLE_ADMIN") && id != usuario.getId()) {
 			flash.addFlashAttribute("error", "No puede usted acceder a un perfil que no sea el suyo");
-			return "redirect:/ver/{id}";
-		}else if (id == usuario.getId()) {
+			return "redirect:/ver/"+usuario.getId();
+		}else if (id == usuario.getId() || hasRole("ROLE_ADMIN")) {
 		
 		usuario = usuarioDao.fetchByIdWithFacturas(id); // clienteService.findOne(id);
 		if (usuario == null) {
@@ -234,6 +235,7 @@ public class ClienteController {
 		} else if (usuario.getId() == null) {
 			usuario.setPassword(bcryptPassword);
 		}
+		usuario.setCreateAt(new Date());
 		usuarioDao.save(usuario);
 
 //		Role role = new Role();

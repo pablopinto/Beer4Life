@@ -1,5 +1,6 @@
 package com.beer.springboot.app.controllers;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -73,13 +79,20 @@ public class FacturaController {
 			flash.addFlashAttribute("error", "El cliente no existe en la base de datos");
 			return "redirect:/listar";
 		}
-
+		
+		if (!hasRole("ROLE_ADMIN") && clienteId != usuario.getId()) {
+			flash.addFlashAttribute("error", "No puede usted acceder a un perfil que no sea el suyo");
+			return "redirect:/form/";
+		}
+		
+		else if (clienteId == usuario.getId() || hasRole("ROLE_ADMIN")) {
+			
 		Factura factura = new Factura();
 		factura.setUsuario(usuario);
 
 		model.put("factura", factura);
 		model.put("titulo", "Crear Factura");
-
+		}
 		return "factura/form";
 	}
 	
@@ -138,6 +151,34 @@ public class FacturaController {
 		
 		flash.addAttribute("error", "La factura no existe en la base de datos , no se pudo eliminar");
 		return "redirect:/listar";
+	}
+	
+	private boolean hasRole(String role) {
+
+		SecurityContext context = SecurityContextHolder.getContext();
+
+		if (context == null) {
+			return false;
+		}
+		Authentication auth = context.getAuthentication();
+
+		if (auth == null) {
+			return false;
+		}
+
+		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
+
+		return authorities.contains(new SimpleGrantedAuthority(role));
+
+//		for (GrantedAuthority authority : authorities) {
+//			if (role.equals(authority.getAuthority())) {
+//				logger.info("Usuario: ".concat(auth.getName()).concat(" Rol: ".concat(authority.getAuthority())));
+//				return true;
+//			}
+//		}
+//
+//		return false;
+
 	}
 
 }
