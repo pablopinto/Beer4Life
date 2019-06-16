@@ -6,6 +6,20 @@
 
 <h2 align="center">TFG del Grado Superior en Desarrollo de Aplicaciones Web</h2>
 <h3 align="center">Un proyecto desarrollado con Spring Boot Thymeleaf</h3>
+<h3 align="center">¿Qué es Beer4Life?</h3>
+<p align="center">Beer4Life es un pequeño proyecto enfocado a la venta de cervezas online, desarrollado con Spring Boot y Thymeleaf.</p>
+<h3 align="center">¿Qué tecnologías se han usado?</h3> 
+<p align="center">
+  • Spring Boot 
+  • JavaScript 
+  • Ajax 
+  • Thymeleaf 
+  • Html 5 
+  • Css 3 
+  • MySql 
+  • MySqlWorkbench 
+  • ES6
+  </p>
 <h3 align="center">Getting Started</h3>
 <p align="center"> Seguir los pasos descritos acontinuacion te guiaran hasta el correcto deploy de este proyecto en tu maquina local para el correcto desarrollo o testeo de la misma</p>
 
@@ -140,3 +154,5 @@ Por ultimo tendremos como administrador la opcion Poblado Productos la cual le p
    </p>
 <h1 align="center">Autor</h1>
 <h3 align="center">Pablo Pinto</h1>
+Enlace a Beer4Life -> https://beer4life.herokuapp.com/
+
