@@ -1,0 +1,108 @@
+///CONFIGURACION DE LA MAQUINA DEBIAN///
+
+Inciamos sesion en la maquina debian con el usuario -> root y la passwd -> usuario.
+En primer lugar vamos a llevar a cabo una actualizacion de los repositorios de la maquina debian ejecutando los siguientes comandos.
+
+*apt-get update ---> actualizar repositorios
+*apt-get upgrade --> actualizar sistema
+
+
+ip route show ---> Mostrar gateway
+
+Accedemos al archivo de interfaces del sistema para asi poder fijar la direccion ip de la debian y otros parametros que nos seran necesarios para poder llevar a cabo el consiguiente proceso de despliegue.
+
+Accedemos a la carpeta network
+
+*cd /etc/network/ 
+*ip route show  -> Antes de editar el archivo interfaces ejecutamos este comando para poder ver el gateway de la maquina.
+*nano interfaces -> Ahora si , sabiendo esto , ejecutamos el siguiente comando e introducimos los correspondientes parametros de la siguiente manera.
+
+- iface eth0 inet static
+- address tuip
+- netmask 255.255.255.0
+- broadcast tuip.255
+- gateway -> comando ip route show
+
+Reiniciamos la maquina para que se hagan efectivos los cambios en la maquina debian
+
+*shutdown -r now -> reiniciar 
+
+Hacemos ping para comprobar que la maquina se conecta correctamente con Internet
+
+*ping 8.8.8.8 -> si ping static ok
+
+Llevamos a cabo la instalacion de los recursos ssh mediante el siguiente comando.
+
+*apt install openssh-server openssh-client
+
+Una vez instalados los recursos accedemos al siguiente archivo.
+
+*nano /etc/ssh/sshd_config
+
+Y modificamos el siguiente parametro para permitir asi que el ssh permita que se pueda hacer la conexion del putty a la debian usando el usuario root.
+
+-PermitRootLogin yes  -> perminitimos que se pueda hacer un inicio de sesion como usuario
+
+Ejecutamos un restart del ssh para que se apliquen los cambios.
+
+*service ssh restart
+
+De manera alternativa se puede hacer lo siguiente.(No terminado)
+
+ Esta seria realmente la manera adecuada de llevar a cabo el proceso desde el punto de vista de un administrador de sistemas ya que no se deberia tener la total capacidad de un administrador desde un cliente externo , si no que es mas correcto crear un usuario con ciertos permisos de administrador. No he llegado a terminar de desplegar esta parte por falta de tiempo , pero me parecia correcto hacer el apunte.
+
+*nano crear_usuario.sh -> creacion script
+
+- useradd -m spring -> crea usuario spring
+- passwd spring -> establece contraseña
+- usermod -a -G sudo spring -> dota al usuario de la capacidad de hacerse root
+- chsh -s /bin/bash spring -> define el shell que va a usar el user
+
+*chmod +x crear_usuario.sh -> damos capacidad de ejecucion
+*sh crear_usuario.sh -> ejecutar script
+*cat /etc/passwd | grep spring -> comprobamos que el usuario se ha creado correctamente
+
+
+///ACCESO POR SHH///
+
+Hacemos ping a la maquina debian desde el cliente de windows para comprobar que la maquina debian se comunica correctamente con el cliente y viceversa.
+
+*ping ipdebian
+
+Acontinuacion hemos de ejecutar el programa Putty y añadir la direccion ip de nuestra maquina debian.
+
+*Putty -> tuip a la que atacar  + puerto 22 + SSH ||Guardar sesion para no tener que repetir proceso siempre||
+
+///TRANSFERENCIA ARCHIVOS POR SSH///
+
+Navegamos por el sistema de archivos del cliente hasta el lugar donde tengamos el codigo almacenado y este lo desplazamos hasta nuestra maquina servidora debian mediante el siguiente comando.
+
+*C:\Archivos de programa\Putty\pscp.exe tuarchivo.html usuario@tuipdebian:/directorio
+
+Si queremos crear un directorio en nuestra debian donde almacenar nuestro proyecto y asi apuntar a este directorio mediante pscp lo haremos con el siguiente comando.
+
+*mkdir /home/spring/SpringBoot -> creacion de directorio SpringBoot
+
+// ULTIMOS PASOS//
+
+Llevamos a cabo la instalacion de java en la maquina servidora , tanto de java 8 como de el jdk. Esto lo llevaremos a cabo con los siguientes comandos.
+
+*apt-get install openjdk-8-jdk-headless
+
+*apt-get install openjdk-8-jdk
+
+Una vez se hayan instalado los anteriores recursos podemos proceder al despliegue de nuestra aplicacion.
+
+Dentro de los archivos que tiene mi repositorio "https://github.com/pablopinto/Beer4Life" encontrara , tanto documentacion del proyecto principal , asi como la api, ambas pueden ser desplegadas de la misma forma , pero nos centraremos en la app principal.
+
+Para ejecutar entonces Beer4Life accederemos a:
+
+* /Beer4Life/target/
+
+Aqui nos encontraremos con nuestro jar a ejecutar y el que nos deplegara la aplicacion mediante el comando.
+
+*java -jar beer-0.0.1-SNAPSHOT.jar
+
+Con esto ya podriamos acceder a nuestro navegador del cliente y acceder a la aplicacion mendiante la url:
+
+*wwww.ipdebian:8090.com
